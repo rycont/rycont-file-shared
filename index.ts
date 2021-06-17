@@ -1,17 +1,34 @@
-import Koa from 'koa'
+import Koa, { Context, DefaultState } from 'koa'
 import Router from 'koa-router'
+import views from 'koa-views'
+import serve from 'koa-static'
 import { downloadFile } from './controller/downloadFile'
 import { getPublicFileList } from './controller/getFileList'
 import { getFileInfo } from './controller/getFileInfo'
 import { login, loginWithEnvInfo } from './controller/login'
+import { getPublicDirectories } from './controller/getPublicDirectories'
+// import  from "koa";
 
 const app = new Koa()
-const rootRouter = new Router()
+
+app.use(serve('./public'));
+
+const rootRouter = new Router<DefaultState, Context>();
+
+const render = views('./view', {
+  map: {
+    mustache: "mustache"
+  },
+  extension: "mustache"
+})
+
+app.use(render)
 
 rootRouter.get('/login', login)
 rootRouter.get('/file/:fileId', getFileInfo)
-rootRouter.get('/file', getPublicFileList)
+rootRouter.get('/:directoryId', getPublicFileList)
 rootRouter.get('/download/:id', downloadFile)
+rootRouter.get('/', getPublicDirectories)
 
 app.use(rootRouter.routes())
 app.use(rootRouter.allowedMethods())

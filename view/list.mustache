@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rycont File Shared</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicons/favicon-16x16.png"
+    />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <nav>
+      <a href="/">
+        <img src="/logo.svg" alt="rycont logo" />
+        <span>RyCont File Shared</span>
+      </a>
+    </nav>
+    <div class="breadcrumb">
+      <div id="location">/</div>
+    </div>
+    <div class="grid_container">
+      {{#directories}}
+      <div>
+        <a class="box_link_wrapper" href="/{{ id }}">
+          <div class="box">
+            <img src="directoryIcon.svg" alt="directory icon" />
+            <h3>{{ name }}</h3>
+            <p>{{ count }}개 파일</p>
+          </div>
+        </a>
+      </div>
+      {{/directories}}
+    </div>
+  </body>
+</html>

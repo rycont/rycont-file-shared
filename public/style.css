@@ -1,0 +1,99 @@
+body {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.grid_container {
+  display: flex;
+  flex-direction: row;
+  margin: -6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.box {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 18px 24px;
+  margin: 6px;
+  transition: background 300ms;
+  display: flex;
+  flex-direction: column;
+}
+h3 {
+  font-weight: 500;
+  font-size: 20px;
+  margin: 0px;
+  flex: 1;
+  line-break: anywhere;
+}
+.box p {
+  font-weight: 300;
+  font-size: 16px;
+  margin: 0px;
+}
+.box img {
+  width: 32px;
+  margin-bottom: 6px;
+}
+nav {
+  font-family: "Noto Sans";
+}
+
+nav a {
+  text-decoration: none;
+  color: inherit;
+}
+
+nav * {
+  vertical-align: middle;
+}
+
+nav img {
+  width: 36px;
+  border-radius: 18px;
+}
+
+nav span {
+  font-size: 24px;
+  font-weight: 900;
+  margin-left: 18px;
+}
+.breadcrumb {
+  margin: -6px;
+  padding-top: 24px;
+}
+
+.breadcrumb div {
+  padding: 15px;
+  background-color: #f6f6f6;
+  display: inline-block;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 6px;
+}
+
+#github div {
+  background-color: #353535;
+  color: white;
+}
+
+#github img {
+  margin-right: 10px;
+}
+
+.box_link_wrapper {
+  text-decoration: none;
+  color: inherit;
+}
+
+.box_link_wrapper:hover .box {
+  background-color: #f9f9f9;
+}
+
+.fixed_size {
+  width: 200px;
+  height: 200px;
+}

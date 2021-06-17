@@ -2,7 +2,7 @@ import { AuthApiClient, ServiceApiClient } from 'node-kakao'
 import fetch, { Headers } from 'node-fetch'
 import readlineAsync from 'readline';
 import { stdin } from 'process';
-import { DownloadableFile, File } from '../types';
+import { DownloadableFile, File, Directory } from '../types';
 
 export const users: Record<string, Drawer> = {}
 
@@ -23,6 +23,7 @@ export class Drawer {
   cookie?: string
   email: string
   publicFolder?: string
+  publicDirectories?: Directory[]
 
   constructor(email: string, password: string, publicFolder?: string, callback?: () => void) {
     this.email = email
@@ -84,10 +85,38 @@ export class Drawer {
     return `_kawlt=${cookies.get('_kawlt')}`
   }
 
-  async getPublicFileList() {
+  async getPublicDirectoryList() {
     if (!this.cookie) throw new Error("Not logged in yet")
-    const uri = this.publicFolder ?
-      `https://drawer-api.kakao.com/folder/${this.publicFolder}/content/list?verticalType=FILE&fetchCount=100`
+    const directories: Directory[] = (await (await fetch('https://drawer-api.kakao.com/folder/list?verticalType=FILE', {
+      headers: new Headers({
+        Cookie: this.cookie
+      })
+    })).json()).items
+    const publicDirectories = directories.filter(d => d.name.startsWith('@')).map(d => ({ ...d, name: d.name.substr(1) }))
+    this.publicDirectories = publicDirectories
+    return publicDirectories
+  }
+
+  async getDirectoryInfo(directoryId: string) {
+    if (this.publicDirectories) return this.publicDirectories.find(e => e.id === directoryId)
+
+    if (!this.cookie) throw new Error("Not logged in yet")
+    const directory: Directory | undefined = await (await fetch('https://drawer-api.kakao.com/folder/' + directoryId, {
+      headers: new Headers({
+        Cookie: this.cookie
+      })
+    })).json()
+
+    return directory && directory.name.startsWith('@') && {
+      ...directory,
+      name: directory.name.substr(1)
+    }
+  }
+
+  async getDirectoryFiles(directoryId?: string) {
+    if (!this.cookie) throw new Error("Not logged in yet")
+    const uri = directoryId ?
+      `https://drawer-api.kakao.com/folder/${directoryId}/content/list?verticalType=FILE&fetchCount=100`
       : `https://drawer-api.kakao.com/mediaFile/list?verticalType=FILE&fetchCount=100`
 
     const files = (await (await fetch(uri, {
@@ -100,6 +129,10 @@ export class Drawer {
       ...file,
       downloadableUrl: `/download/${file.id}`
     }))
+  }
+
+  async getPublicFileList() {
+    return this.getDirectoryFiles(this.publicFolder)
   }
 
   registerToStore() {
